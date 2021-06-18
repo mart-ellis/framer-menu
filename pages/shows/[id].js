@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import tw, { styled } from 'twin.macro';
 import Header from '../../components/Header';
-import {server} from  '../../serverConfig/index';
+import { shows } from '../../data/shows';
 
 const StyledContainer = tw.div`w-screen h-screen flex flex-col justify-center items-center bg-white`
 
@@ -33,8 +33,6 @@ const Show = ({ show }) => {
 }
 
 export async function getStaticPaths() {
-    const res = await fetch(`${server}/api/shows`);
-    const shows = await res.json()
 
     const paths = shows.map(show => ({
         params: { id: show.id }
@@ -44,10 +42,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-    console.log(context.params.id);
     const id = context.params.id
-    const res = await fetch(`${server}/api/shows/${id}`);
-    const show = await res.json()
+    const show = shows.find((show) => show.id === id)
 
     return {
         props: { show: show }

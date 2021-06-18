@@ -5,6 +5,7 @@ import tw, { styled } from 'twin.macro'
 import Header from '../components/Header'
 import Menu from '../components/Menu'
 import useMousePosition from '../hooks/useMousePosition'
+import { shows } from '../data/shows'
 
 const StyledDesktopOnlyWarning = tw.div`w-screen h-screen justify-center items-center overflow-hidden flex xl:hidden`
 
@@ -44,8 +45,6 @@ export default function Home({ shows }) {
 }
 
 export async function getStaticProps(context) {
-  const res = await fetch('http://localhost:3000/api/shows/');
-  const shows = await res.json()
 
   if (!shows) {
       return {
