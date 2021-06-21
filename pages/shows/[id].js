@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import tw, { styled } from 'twin.macro';
 import Header from '../../components/Header';
+import Layout from '../../components/Layout';
 import { shows } from '../../data/shows';
 
 const StyledContainer = tw.div`w-screen h-screen flex flex-col justify-center items-center bg-white`
@@ -18,17 +19,14 @@ const StyledImageContainer = styled.div({
 
 const Show = ({ show }) => {
     return (
-        <StyledContainer>
-            <StyledBackButton>
-                <Link href="/">
-                    <a>Back</a>
-                </Link>
-            </StyledBackButton>
-            <StyledImageContainer>
-                <img src={`${show.src}`}></img>
-            </StyledImageContainer>
-            <StyledTitle>{show.title}</StyledTitle>
-        </StyledContainer>
+        <Layout>
+            <StyledContainer>
+                <StyledImageContainer>
+                    <img src={`${show.src}`}></img>
+                </StyledImageContainer>
+                <StyledTitle>{show.title}</StyledTitle>
+            </StyledContainer>
+        </Layout>
     );
 }
 

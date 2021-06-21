@@ -121,7 +121,7 @@ const Menu = ({ shows, menuOpen, setMenuOpen, x, y }) => {
                                     ref={list}
 
                                 >
-                                    <Link href={`shows/${show.id}`}>
+                                    <Link href={`/shows/${show.id}`} >
                                         <StyledMenuItemInner>
                                             <StyledStartLine css={{ flex: `${show.leftLineFlex}`}} >
                                                 <StyledLineMask 
