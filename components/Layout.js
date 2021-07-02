@@ -8,7 +8,7 @@ import { shows } from "../data/shows";
 
 const StyledDesktopOnlyWarning = tw.div`w-screen h-screen justify-center items-center overflow-hidden flex xl:hidden`
 
-const Container = tw.div`w-screen h-screen justify-center items-center overflow-hidden hidden xl:flex`
+const Container = tw.div`max-w-full w-screen h-screen justify-center items-center overflow-hidden hidden xl:flex`
 
 const Title = tw.h1`text-4xl font-semibold max-w-2xl text-center leading-normal text-gray-800`
 

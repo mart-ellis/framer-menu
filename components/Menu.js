@@ -5,7 +5,7 @@ import { motion, AnimatePresence, animate } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { list } from 'postcss';
 
-const StyledMenuContainer = tw(motion.div)`min-w-full min-h-screen bg-white flex items-center justify-center z-50 absolute`
+const StyledMenuContainer = tw(motion.div)`max-w-full w-screen min-h-screen bg-white flex items-center justify-center z-50 fixed top-0 left-0`
 const StyledCloseIcon = tw.div`absolute top-11 right-32 uppercase font-bold text-gray-800` 
 const StyledMenu = tw(motion.ul)`w-3/5`
 const StyledMenuItem = tw(motion.li)`my-5`
@@ -78,109 +78,107 @@ const maskReveal = {
     }
 }
 
-
 const Menu = ({ shows, menuOpen, setMenuOpen, x, y }) => {
 
     return (
 
         <AnimatePresence>
             {menuOpen && (
-                <>
-                    <StyledMenuContainer 
-                        initial={{ visibility: 'hidden' }}
-                        animate={{ visibility: 'visible', transition: { delay: 1} }}
-                        exit={{ visibility: 'hidden', transition: { delay: 1} }}
+                
+                <StyledMenuContainer 
+                    initial={{ visibility: 'hidden' }}
+                    animate={{ visibility: 'visible', transition: { delay: 1} }}
+                    exit={{ visibility: 'hidden', transition: { delay: 1} }}
+                >
+                    <StyledCloseIcon onClick={() => setMenuOpen(!menuOpen)}>
+                        <p>Close</p>
+                    </StyledCloseIcon>
+                    <StyledMenu
+                        variants={parent}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
                     >
-                        <StyledCloseIcon onClick={() => setMenuOpen(!menuOpen)}>
-                            <p>Close</p>
-                        </StyledCloseIcon>
-                        <StyledMenu
-                            variants={parent}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                        >
-                            {shows.map((show) => {
-                                let list = useRef()
-                                const [listItemHover, setListItemHover] = useState(false)
-                                const [listPosition, setListPosition] = useState({
-                                    top: 0,
-                                    left: 0
+                        {shows.map((show) => {
+                            let list = useRef()
+                            const [listItemHover, setListItemHover] = useState(false)
+                            const [listPosition, setListPosition] = useState({
+                                top: 0,
+                                left: 0
+                            })
+
+                            useEffect(() => {
+                                setListPosition({
+                                    top: list.current.getBoundingClientRect().top,
+                                    left: list.current.getBoundingClientRect().left
                                 })
+                            }, [listItemHover])
+                            
+                            
+                            return (
+                            <StyledMenuItem
+                                ref={list}
 
-                                useEffect(() => {
-                                    setListPosition({
-                                        top: list.current.getBoundingClientRect().top,
-                                        left: list.current.getBoundingClientRect().left
-                                    })
-                                }, [listItemHover])
-                                
-                                
-                                return (
-                                <StyledMenuItem
-                                    ref={list}
-
-                                >
-                                    <Link href={`/shows/${show.id}`} >
-                                        <StyledMenuItemInner>
-                                            <StyledStartLine css={{ flex: `${show.leftLineFlex}`}} >
-                                                <StyledLineMask 
+                            >
+                                <Link href={`/shows/${show.id}`} >
+                                    <StyledMenuItemInner>
+                                        <StyledStartLine css={{ flex: `${show.leftLineFlex}`}} >
+                                            <StyledLineMask 
+                                                variants={maskReveal} 
+                                                transition={{...transition, duration: 1}} 
+                                            />
+                                        </StyledStartLine>
+                                        <StyledTitleContainer 
+                                            onHoverStart={() => setListItemHover(true)}
+                                            onHoverEnd={() => setListItemHover(false)}
+                                        >
+                                            <StyledTitle>
+                                                <motion.div variants={titleSlideUp} transition={transition}>
+                                                    {show.title}
+                                                </motion.div>
+                                            </StyledTitle>
+                                        </StyledTitleContainer>
+                                        <StyledEndLine css={{ flex: `${show.rightLineFlex}`}}>
+                                            <StyledLineMask 
                                                     variants={maskReveal} 
                                                     transition={{...transition, duration: 1}} 
-                                                />
-                                            </StyledStartLine>
-                                            <StyledTitleContainer 
-                                                onHoverStart={() => setListItemHover(true)}
-                                                onHoverEnd={() => setListItemHover(false)}
-                                            >
-                                                <StyledTitle>
-                                                    <motion.div variants={titleSlideUp} transition={transition}>
-                                                        {show.title}
-                                                    </motion.div>
-                                                </StyledTitle>
-                                            </StyledTitleContainer>
-                                            <StyledEndLine css={{ flex: `${show.rightLineFlex}`}}>
-                                                <StyledLineMask 
-                                                        variants={maskReveal} 
-                                                        transition={{...transition, duration: 1}} 
-                                                        isRight
-                                                />
-                                            </StyledEndLine>
-                                            <StyledImageContainer css={{ left: `${show.thumbnailPosition}`}}>
-                                                <StyledImageMask
-                                                    variants={maskReveal}
-                                                    transition={transition}
-                                                />
-                                                <img src={`${show.src}`} />
-                                            </StyledImageContainer>
-                                            <StyledFloatingImageContainer
-                                                initial={{opacity: 0}}
-                                                animate={{ 
-                                                    opacity: listItemHover ? 1 : 0,
-                                                    x: x - listPosition.left + show.offset,
-                                                    y: y - listPosition.top - 150
-                                                }}
-                                                transition={{
-                                                    ease: 'linear'
-                                                }}
-                                            >
-                                                <img src={`${show.src}`} />
-                                            </StyledFloatingImageContainer>
-                                        </StyledMenuItemInner>
-                                    </Link>
-                                </StyledMenuItem>
-                            )})}
-                        </StyledMenu>
-                    </StyledMenuContainer>
+                                                    isRight
+                                            />
+                                        </StyledEndLine>
+                                        <StyledImageContainer css={{ left: `${show.thumbnailPosition}`}}>
+                                            <StyledImageMask
+                                                variants={maskReveal}
+                                                transition={transition}
+                                            />
+                                            <img src={`${show.src}`} />
+                                        </StyledImageContainer>
+                                        <StyledFloatingImageContainer
+                                            initial={{opacity: 0}}
+                                            animate={{ 
+                                                opacity: listItemHover ? 1 : 0,
+                                                x: x - listPosition.left + show.offset,
+                                                y: y - listPosition.top - 150
+                                            }}
+                                            transition={{
+                                                ease: 'linear'
+                                            }}
+                                        >
+                                            <img src={`${show.src}`} />
+                                        </StyledFloatingImageContainer>
+                                    </StyledMenuItemInner>
+                                </Link>
+                            </StyledMenuItem>
+                        )})}
+                    </StyledMenu>
                     <Panels />
-                </>
+                </StyledMenuContainer>
             )}
         </AnimatePresence>
     );
 }
 
-const StyledLeftPanel = tw(motion.div)`absolute h-screen z-50 left-0`
-const StyledRightPanel = tw(motion.div)`absolute h-screen z-50 right-0`
+const StyledLeftPanel = tw(motion.div)`fixed h-screen z-50 left-0`
+const StyledRightPanel = tw(motion.div)`fixed h-screen z-50 right-0`
 
 const Panels = () => {
     const [panelComplete, setPanelComplete]  = useState(false)
@@ -200,7 +198,7 @@ const Panels = () => {
                 }}
                 transition={{...transition, duration: 2, times: [0, .5, 1]}} 
             />
-            <StyledRightPanel style={{ minWidth: '50vw' }} 
+            <StyledRightPanel
                 style={{ minWidth: '50vw', background: panelComplete ? '#ff5959' : '#facf5a' }} 
                 initial={{ height: 0 }}
                 animate={{ 

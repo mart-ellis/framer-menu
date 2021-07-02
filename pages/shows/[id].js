@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import Layout from '../../components/Layout';
 import { shows } from '../../data/shows';
 
-const StyledContainer = tw.div`w-screen h-screen flex flex-col justify-center items-center bg-white`
+const StyledContainer = tw.div`max-w-full w-screen h-screen flex flex-col justify-center items-center bg-white`
 
 const StyledBackButton = tw.div`absolute top-8 left-16 uppercase font-bold`
 
